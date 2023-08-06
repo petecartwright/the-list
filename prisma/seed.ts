@@ -24,18 +24,18 @@ async function seed() {
     },
   });
 
-  await prisma.note.create({
+  await prisma.place.create({
     data: {
-      title: "My first note",
-      body: "Hello, world!",
+      name: "McDonald's",
+      notes: "Egg McMuffin is good.",
       userId: user.id,
     },
   });
 
-  await prisma.note.create({
+  await prisma.place.create({
     data: {
-      title: "My second note",
-      body: "Hello, world!",
+      name: "Taco Bell",
+      notes: "Chicken Chipotle Ranch Griller works surprisingly well",
       userId: user.id,
     },
   });
