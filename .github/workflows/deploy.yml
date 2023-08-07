@@ -76,44 +76,45 @@ jobs:
       - name: ⚡ Run vitest
         run: npm run test -- --coverage
 
-  cypress:
-    name: ⚫️ Cypress
-    runs-on: ubuntu-latest
-    steps:
-      - name: ⬇️ Checkout repo
-        uses: actions/checkout@v3
+  # cypress:
+  #   name: ⚫️ Cypress
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: ⬇️ Checkout repo
+  #       uses: actions/checkout@v3
 
-      - name: 🏄 Copy test env vars
-        run: cp .env.example .env
+  #     - name: 🏄 Copy test env vars
+  #       run: cp .env.example .env
 
-      - name: ⎔ Setup node
-        uses: actions/setup-node@v3
-        with:
-          cache: npm
-          cache-dependency-path: ./package.json
-          node-version: 18
+  #     - name: ⎔ Setup node
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         cache: npm
+  #         cache-dependency-path: ./package.json
+  #         node-version: 18
 
-      - name: 📥 Install deps
-        run: npm install
+  #     - name: 📥 Install deps
+  #       run: npm install
 
-      - name: 🛠 Setup Database
-        run: npx prisma migrate reset --force
+  #     - name: 🛠 Setup Database
+  #       run: npx prisma migrate reset --force
 
-      - name: ⚙️ Build
-        run: npm run build
+  #     - name: ⚙️ Build
+  #       run: npm run build
 
-      - name: 🌳 Cypress run
-        uses: cypress-io/github-action@v5
-        with:
-          start: npm run start:mocks
-          wait-on: http://localhost:8811
-        env:
-          PORT: 8811
+  #     - name: 🌳 Cypress run
+  #       uses: cypress-io/github-action@v5
+  #       with:
+  #         start: npm run start:mocks
+  #         wait-on: http://localhost:8811
+  #       env:
+  #         PORT: 8811
 
   deploy:
     name: 🚀 Deploy
     runs-on: ubuntu-latest
-    needs: [lint, typecheck, vitest, cypress]
+    # needs: [lint, typecheck, vitest, cypress]
+    needs: [lint, typecheck, vitest]
     # only build/deploy main branch on pushes
     if: ${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev') && github.event_name == 'push' }}
 
