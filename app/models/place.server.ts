@@ -2,6 +2,8 @@ import type { User, Place } from "@prisma/client";
 
 import { prisma } from "~/db.server";
 
+import { json } from "@remix-run/node";
+
 export function getPlace({
   id,
   userId,
@@ -15,9 +17,11 @@ export function getPlace({
 }
 
 export function getPlaceListItems({ userId }: { userId: User["id"] }) {
+  console.log("in getPlaceListItems, userId is ", userId);
+
   return prisma.place.findMany({
     where: { userId },
-    select: { id: true, name: true },
+    // select: { id: true, name: true },
     orderBy: { updatedAt: "desc" },
   });
 }
