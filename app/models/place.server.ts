@@ -2,8 +2,6 @@ import type { User, Place } from "@prisma/client";
 
 import { prisma } from "~/db.server";
 
-import { json } from "@remix-run/node";
-
 export function getPlace({
   id,
   userId,
