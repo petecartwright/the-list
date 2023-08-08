@@ -27,7 +27,7 @@ export default function PlacesPage() {
             return (
               <li key={placeItem.id}>
                 Place: <Link to={placeItem.id}>{placeItem.name}</Link> <br />
-                Notes: {placeItem.notes}
+                Notes: <textarea disabled>{placeItem.notes}</textarea>
               </li>
             );
           })}
