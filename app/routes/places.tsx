@@ -33,7 +33,11 @@ export default function PlacesPage() {
           })}
         </ul>
       ) : (
-        <div> Didn't find any places - click here to create </div>
+        <div>
+          {" "}
+          Didn't find any places - click <Link to="/places/new">here</Link> to
+          create{" "}
+        </div>
       )}
 
       <Outlet />
