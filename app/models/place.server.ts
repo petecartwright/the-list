@@ -15,11 +15,8 @@ export function getPlace({
 }
 
 export function getPlaceListItems({ userId }: { userId: User["id"] }) {
-  console.log("in getPlaceListItems, userId is ", userId);
-
   return prisma.place.findMany({
     where: { userId },
-    // select: { id: true, name: true },
     orderBy: { updatedAt: "desc" },
   });
 }

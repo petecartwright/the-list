@@ -1,6 +1,6 @@
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { useLoaderData, Outlet, Link } from "@remix-run/react";
 import { useUser } from "~/utils";
 import { requireUserId } from "~/session.server";
 import { getPlaceListItems } from "~/models/place.server";
@@ -26,7 +26,8 @@ export default function PlacesPage() {
           {data.placesListItems.map((placeItem) => {
             return (
               <li key={placeItem.id}>
-                Place: {placeItem.name} Notes: {placeItem.notes}
+                Place: <Link to={placeItem.id}>{placeItem.name}</Link> <br />
+                Notes: {placeItem.notes}
               </li>
             );
           })}
@@ -34,6 +35,8 @@ export default function PlacesPage() {
       ) : (
         <div> Didn't find any places - click here to create </div>
       )}
+
+      <Outlet />
     </div>
   );
 }
