@@ -2,6 +2,7 @@ import { cssBundleHref } from "@remix-run/css-bundle";
 import type { LinksFunction, LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import {
+  Link,
   Links,
   LiveReload,
   Meta,
@@ -32,6 +33,15 @@ export default function App() {
         <Links />
       </head>
       <body className="h-full">
+        <div>
+          <h1 className="text-center text-6xl font-extrabold tracking-tight sm:text-8xl lg:text-9xl">
+            <Link to="/places">
+              <span className="block uppercase text-yellow-500 drop-shadow-md">
+                The List
+              </span>
+            </Link>
+          </h1>
+        </div>
         <Outlet />
         <ScrollRestoration />
         <Scripts />

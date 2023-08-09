@@ -32,14 +32,6 @@ export default function PlacesPage() {
       <Link to="new" className="block p-4 text-xl text-blue-500">
         + New Place
       </Link>
-      {/* <button
-          type="submit"
-          name="intent"
-          value="delete"
-          className="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600 focus:bg-red-400"
-        >
-          Delete
-        </button> */}
       <Outlet />
     </div>
   );
