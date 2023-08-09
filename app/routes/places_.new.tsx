@@ -27,7 +27,7 @@ export const action = async ({ request }: ActionArgs) => {
   }
 
   const place = await createPlace({ name, notes, userId });
-  return redirect(`/places/${place.id}`);
+  return redirect(`/places`);
 };
 
 export default function NewPlacePage() {
