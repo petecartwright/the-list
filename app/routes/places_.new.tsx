@@ -26,7 +26,7 @@ export const action = async ({ request }: ActionArgs) => {
     );
   }
 
-  const place = await createPlace({ name, notes, userId });
+  await createPlace({ name, notes, userId });
   return redirect(`/places`);
 };
 
