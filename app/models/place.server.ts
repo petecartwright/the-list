@@ -49,3 +49,23 @@ export function deletePlace({
     where: { id, userId },
   });
 }
+
+export async function updatePlace({
+  id,
+  notes,
+  userId,
+}: Pick<Place, "id" | "notes"> & {
+  userId: User["id"];
+}) {
+  const placeToUpdate = await prisma.place.findFirst({
+    where: { id, userId },
+  });
+
+  //TODO - if no place, error
+
+  const updatedPlace = prisma.place.update({
+    where: { id: placeToUpdate?.id },
+    data: { notes },
+  });
+  return updatedPlace;
+}

@@ -1,7 +1,6 @@
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData, Outlet, Link } from "@remix-run/react";
-import { useUser } from "~/utils";
 import { requireUserId } from "~/session.server";
 import { getPlaceListItems } from "~/models/place.server";
 
@@ -14,10 +13,6 @@ export const loader = async ({ request }: LoaderArgs) => {
 
 export default function PlacesPage() {
   const data = useLoaderData<typeof loader>();
-  const user = useUser();
-
-  console.log("Data", data.placesListItems);
-  console.log("user", user);
 
   return (
     <div>
@@ -27,19 +22,24 @@ export default function PlacesPage() {
             return (
               <li key={placeItem.id}>
                 Place: <Link to={placeItem.id}>{placeItem.name}</Link> <br />
-                Notes: <textarea disabled>{placeItem.notes}</textarea>
+                Notes: <textarea disabled value={placeItem.notes} />
               </li>
             );
           })}
         </ul>
-      ) : (
-        <div>
-          {" "}
-          Didn't find any places - click <Link to="/places/new">here</Link> to
-          create{" "}
-        </div>
-      )}
+      ) : null}
 
+      <Link to="new" className="block p-4 text-xl text-blue-500">
+        + New Place
+      </Link>
+      {/* <button
+          type="submit"
+          name="intent"
+          value="delete"
+          className="rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600 focus:bg-red-400"
+        >
+          Delete
+        </button> */}
       <Outlet />
     </div>
   );
