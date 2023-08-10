@@ -3,6 +3,8 @@ import { json } from "@remix-run/node";
 import { useLoaderData, Outlet, Link } from "@remix-run/react";
 import { requireUserId } from "~/session.server";
 import { getPlaceListItems } from "~/models/place.server";
+import { buttonVariants } from "@/components/ui/button";
+import { PlaceCard } from "~/components/PlaceCard";
 
 export const loader = async ({ request }: LoaderArgs) => {
   const userId = await requireUserId(request);
@@ -21,15 +23,14 @@ export default function PlacesPage() {
           {data.placesListItems.map((placeItem) => {
             return (
               <li key={placeItem.id}>
-                Place: <Link to={placeItem.id}>{placeItem.name}</Link> <br />
-                Notes: <textarea disabled value={placeItem.notes} />
+                <PlaceCard placeItem={placeItem} />
               </li>
             );
           })}
         </ul>
       ) : null}
 
-      <Link to="new" className="block p-4 text-xl text-blue-500">
+      <Link to="new" className={buttonVariants({ variant: "outline" })}>
         + New Place
       </Link>
       <Outlet />
