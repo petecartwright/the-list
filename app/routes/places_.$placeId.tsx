@@ -23,8 +23,6 @@ export const action = async ({ params, request }: ActionArgs) => {
 
   invariant(params.placeId, "Place id not found");
 
-  console.log("in action! params is", params);
-  console.log("in action! formData.intent is", formData.get("intent"));
   const intent = formData.get("intent");
   if (intent === "delete") {
     await deletePlace({ id: params.placeId, userId });

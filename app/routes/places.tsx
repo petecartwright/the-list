@@ -4,13 +4,16 @@ import { useLoaderData, Outlet, Link } from "@remix-run/react";
 import { requireUserId } from "~/session.server";
 import { getPlaceListItems } from "~/models/place.server";
 import { buttonVariants } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { PlaceCard } from "~/components/PlaceCard";
 import { useState } from "react";
 
 export const loader = async ({ request }: LoaderArgs) => {
   const userId = await requireUserId(request);
   const placesListItems = await getPlaceListItems({ userId });
-
+  placesListItems.sort((a, b) => {
+    return a.name.toLocaleLowerCase() < b.name.toLocaleLowerCase() ? -1 : 1;
+  });
   return json({ placesListItems });
 };
 
@@ -34,23 +37,23 @@ export default function PlacesPage() {
 
   return (
     <div>
-      <input
+      <Input
+        className="w-1/4"
         name="search"
         placeholder="search"
         onChange={handleSearchChange}
-      ></input>
+      ></Input>
       {placesToDisplay ? (
-        <ul>
+        <ul className="flex flex-col items-center">
           {placesToDisplay.map((placeItem) => {
             return (
-              <li key={placeItem.id}>
+              <li className="w-4/5" key={placeItem.id}>
                 <PlaceCard placeItem={placeItem} />
               </li>
             );
           })}
         </ul>
       ) : null}
-
       <Link to="new" className={buttonVariants({ variant: "outline" })}>
         + New Place
       </Link>
