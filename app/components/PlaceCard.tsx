@@ -3,6 +3,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Link, useFetcher } from "@remix-run/react";
 import type { SerializeFrom } from "@remix-run/node";
 import type { Place } from "@prisma/client";
+import { useDebounce } from "~/utils";
+import { useEffect, useState } from "react";
 
 interface IPlaceCardProps {
   placeItem: SerializeFrom<Place>;
@@ -10,6 +12,21 @@ interface IPlaceCardProps {
 
 export const PlaceCard = ({ placeItem }: IPlaceCardProps) => {
   const fetcher = useFetcher();
+
+  const [noteText, setNoteText] = useState<string>(placeItem.notes);
+  const debouncedNoteText = useDebounce<string>(noteText, 500);
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newNotes = String(e.target.value).trim();
+    setNoteText(newNotes);
+  };
+
+  useEffect(() => {
+    fetcher.submit(
+      { notes: debouncedNoteText },
+      { action: `/places/${placeItem.id}/edit`, method: "post" }
+    );
+  }, [debouncedNoteText, fetcher, placeItem.id]);
 
   return (
     <Card className="m-1">
@@ -20,21 +37,7 @@ export const PlaceCard = ({ placeItem }: IPlaceCardProps) => {
       </CardHeader>
 
       <CardContent className=" flex flex-col items-center p-2">
-        <Textarea
-          onBlur={(e) => {
-            const newNotes = String(e.target.value).trim();
-            // how do we handle this if we want to change it *back* to the `placeItem.notes` on first render?
-            // will it rerender??
-            if (newNotes !== placeItem.notes.trim()) {
-              console.log("newNotes isn't old notes");
-              fetcher.submit(
-                { notes: newNotes },
-                { action: `/places/${placeItem.id}/edit`, method: "post" }
-              );
-            }
-          }}
-          defaultValue={placeItem.notes}
-        />
+        <Textarea onChange={handleChange} defaultValue={noteText} />
       </CardContent>
     </Card>
   );
