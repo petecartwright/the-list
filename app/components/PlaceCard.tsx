@@ -11,8 +11,6 @@ interface IPlaceCardProps {
 }
 
 export const PlaceCard = ({ placeItem }: IPlaceCardProps) => {
-  const fetcher = useFetcher();
-
   const [noteText, setNoteText] = useState<string>(placeItem.notes);
   const debouncedNoteText = useDebounce<string>(noteText, 500);
 
@@ -20,13 +18,15 @@ export const PlaceCard = ({ placeItem }: IPlaceCardProps) => {
     const newNotes = String(e.target.value).trim();
     setNoteText(newNotes);
   };
+  const fetcher = useFetcher();
 
   useEffect(() => {
     fetcher.submit(
       { notes: debouncedNoteText },
       { action: `/places/${placeItem.id}/edit`, method: "post" }
     );
-  }, [debouncedNoteText, fetcher, placeItem.id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedNoteText, placeItem.id]);
 
   return (
     <Card className="m-1">
