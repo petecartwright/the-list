@@ -1,6 +1,6 @@
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useLoaderData, Outlet, Link } from "@remix-run/react";
+import { useLoaderData, Form, Link, Outlet } from "@remix-run/react";
 import { requireUserId } from "~/session.server";
 import { getPlaceListItems } from "~/models/place.server";
 import { buttonVariants } from "@/components/ui/button";
@@ -57,6 +57,14 @@ export default function PlacesPage() {
       <Link to="new" className={buttonVariants({ variant: "outline" })}>
         + New Place
       </Link>
+      <Form action="/logout" method="post">
+        <button
+          type="submit"
+          className="rounded bg-slate-600 px-4 py-2 text-blue-100 hover:bg-blue-500 active:bg-blue-600"
+        >
+          Logout
+        </button>
+      </Form>
       <Outlet />
     </div>
   );
