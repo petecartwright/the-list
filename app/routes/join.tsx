@@ -19,6 +19,28 @@ export const action = async ({ request }: ActionArgs) => {
   const password = formData.get("password");
   const redirectTo = safeRedirect(formData.get("redirectTo"), "/");
 
+  if (typeof email !== "string" || email.length === 0) {
+    return json(
+      { errors: { email: "Email is required", password: null } },
+      { status: 400 }
+    );
+  }
+
+  const allowedEmails = [
+    "pete.cartwright@gmail.com",
+    "pete@petecartwright.com",
+    "kuhn.laura@gmail.com",
+  ];
+
+  if (!allowedEmails.includes(email.toString().toLocaleLowerCase())) {
+    return json(
+      {
+        errors: { email: "Sorry, only Pete and Laura allowed", password: null },
+      },
+      { status: 400 }
+    );
+  }
+
   if (!validateEmail(email)) {
     return json(
       { errors: { email: "Email is invalid", password: null } },
