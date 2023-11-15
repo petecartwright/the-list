@@ -12,21 +12,33 @@ interface IPlaceCardProps {
 
 export const PlaceCard = ({ placeItem }: IPlaceCardProps) => {
   const [noteText, setNoteText] = useState<string>(placeItem.notes);
+  const [textAreaTouched, setTextAreaTouched] = useState<boolean>(false);
+  const [shouldShowSavingIndicator, setShouldShowSavingIndicator] =
+    useState<boolean>(false);
   const debouncedNoteText = useDebounce<string>(noteText, 500);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newNotes = String(e.target.value).trim();
     setNoteText(newNotes);
+    setTextAreaTouched(true);
   };
+
   const fetcher = useFetcher();
 
   useEffect(() => {
-    fetcher.submit(
-      { notes: debouncedNoteText },
-      { action: `/places/${placeItem.id}/edit`, method: "post" }
-    );
+    if (textAreaTouched) {
+      fetcher.submit(
+        { notes: debouncedNoteText },
+        { action: `/places/${placeItem.id}/edit`, method: "post" }
+      );
+      setShouldShowSavingIndicator(true);
+
+      setTimeout(() => {
+        setShouldShowSavingIndicator(false);
+      }, 500);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedNoteText, placeItem.id]);
+  }, [debouncedNoteText, placeItem.id, textAreaTouched]);
 
   return (
     <Card className="m-1">
@@ -34,6 +46,13 @@ export const PlaceCard = ({ placeItem }: IPlaceCardProps) => {
         <CardTitle>
           <Link to={placeItem.id}>{placeItem.name}</Link>
         </CardTitle>
+        <div
+          className={`transition-opacity ${
+            shouldShowSavingIndicator ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          Saved!
+        </div>
       </CardHeader>
 
       <CardContent className=" flex flex-col items-center p-2">
