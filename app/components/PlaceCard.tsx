@@ -17,16 +17,16 @@ export const PlaceCard = ({ placeItem }: IPlaceCardProps) => {
     useState<boolean>(false);
   const debouncedNoteText = useDebounce<string>(noteText, 500);
 
+  const fetcher = useFetcher();
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newNotes = String(e.target.value).trim();
     setNoteText(newNotes);
     setTextAreaTouched(true);
   };
 
-  const fetcher = useFetcher();
-
   useEffect(() => {
-    if (textAreaTouched) {
+    if (textAreaTouched && debouncedNoteText == noteText) {
       fetcher.submit(
         { notes: debouncedNoteText },
         { action: `/places/${placeItem.id}/edit`, method: "post" }
