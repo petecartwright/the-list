@@ -1,4 +1,4 @@
-import { redirect, type ActionFunctionArgs } from "@remix-run/node";
+import { type ActionFunctionArgs, redirect } from "@remix-run/node";
 import invariant from "tiny-invariant";
 
 import { deletePlace } from "~/models/place.server";
