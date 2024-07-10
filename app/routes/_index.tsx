@@ -10,9 +10,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 
   if (user) {
     return redirect("/places");
-  } else {
-    return redirect("/login");
   }
+
+  return redirect("/login");
 };
 
 export default function Index() {
