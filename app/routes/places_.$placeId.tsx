@@ -1,11 +1,9 @@
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Form, Link, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 
 import { getPlaceWithItems } from "~/models/place.server";
 import { requireUserId } from "~/session.server";
-
-// import { useUser } from "~/utils";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request);
@@ -26,13 +24,28 @@ export default function PlacesPage() {
             return (
               <li key={item.id}>
                 {item.name} - {item.note}
+                <Form method="post" action={`items/${item.id}/destroy`}>
+                  <button>DELETE</button>
+                </Form>
+                <Link to={`items/${item.id}/edit`}>Edit</Link>
               </li>
             );
           })}
         </ul>
       </div>
+      <div>
+        <Link to="new_item">Add Item</Link>
+      </div>
+      <div>
+        <Link to="edit">Edit</Link>
+      </div>
+      <div>
+        <Form action="destroy" method="post">
+          <button type="submit">DELETE</button>
+        </Form>
+      </div>
     </div>
   ) : (
-    <div>didn&apost find a place</div>
+    <div>didn&apos;t find a place</div>
   );
 }

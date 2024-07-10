@@ -26,7 +26,7 @@ export function getPlaceWithItems({
   });
 }
 
-export function getPlaceListItems({ userId }: { userId: User["id"] }) {
+export function getPlaceList({ userId }: { userId: User["id"] }) {
   return prisma.place.findMany({
     select: { id: true, name: true, note: true },
     where: { userId },
@@ -36,14 +36,15 @@ export function getPlaceListItems({ userId }: { userId: User["id"] }) {
 
 export function createPlace({
   name,
-  // note?
+  note,
   userId,
-}: Pick<Place, "name"> & {
+}: Pick<Place, "name" | "note"> & {
   userId: User["id"];
 }) {
   return prisma.place.create({
     data: {
       name,
+      note,
       user: {
         connect: {
           id: userId,
@@ -59,5 +60,22 @@ export function deletePlace({
 }: Pick<Place, "id"> & { userId: User["id"] }) {
   return prisma.place.deleteMany({
     where: { id, userId },
+  });
+}
+
+export function updatePlace({
+  id,
+  name,
+  note,
+  userId,
+}: Pick<Place, "id" | "name" | "note"> & {
+  userId: User["id"];
+}) {
+  return prisma.place.update({
+    where: { id, userId },
+    data: {
+      name,
+      note,
+    },
   });
 }

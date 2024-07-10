@@ -8,8 +8,6 @@ export const meta: MetaFunction = () => [{ title: "The List" }];
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getUser(request);
 
-  console.log("user", user);
-
   if (user) {
     return redirect("/places");
   } else {
