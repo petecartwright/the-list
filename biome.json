@@ -1,17 +1,17 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
 
+  "files": {
+    "ignore": ["node_modules/**", "public/**", "build/**"]
+  },
   "formatter": {
-    "ignore": ["node_modules/**", "public/**", "build/**"],
     "indentStyle": "space"
   },
   "organizeImports": {
-    "ignore": ["node_modules/**", "public/**", "build/**"],
     "enabled": true
   },
   "linter": {
     "enabled": true,
-    "ignore": ["node_modules/**", "public/**", "build/**"],
     "rules": {
       "recommended": true
     }
