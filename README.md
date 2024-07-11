@@ -20,8 +20,9 @@ npx create-remix@latest --template remix-run/indie-stack
 - End-to-end testing with [Cypress](https://cypress.io)
 - Local third party request mocking with [MSW](https://mswjs.io)
 - Unit testing with [Vitest](https://vitest.dev) and [Testing Library](https://testing-library.com)
-- Code formatting with [Prettier](https://prettier.io)
-- Linting with [ESLint](https://eslint.org)
+- Code formatting with [Biome](https://biomejs.dev/)
+- Linting with [Biome](https://biomejs.dev/)
+- Import Organization with [Biome](https://biomejs.dev/)
 - Static Types with [TypeScript](https://typescriptlang.org)
 
 Not a fan of bits of the stack? Fork it, change it, and use `npx create-remix --template your/repo`! Make it your own.
