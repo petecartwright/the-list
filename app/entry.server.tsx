@@ -67,6 +67,7 @@ function handleBotRequest(
           reject(error);
         },
         onError(error: unknown) {
+          // biome-ignore lint/style/noParameterAssign: This is remix's code, not mine
           responseStatusCode = 500;
           console.error(error);
         },
@@ -110,6 +111,7 @@ function handleBrowserRequest(
         },
         onError(error: unknown) {
           console.error(error);
+          // biome-ignore lint/style/noParameterAssign: This is remix's code, not mine
           responseStatusCode = 500;
         },
       },
