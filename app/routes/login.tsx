@@ -75,7 +75,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   return createUserSession({
     redirectTo,
-    remember: remember === "on" ? true : false,
+    remember: remember === "on",
     request,
     userId: user.id,
   });
@@ -114,7 +114,6 @@ export default function LoginPage() {
                 ref={emailRef}
                 id="email"
                 required
-                // eslint-disable-next-line jsx-a11y/no-autofocus
                 autoFocus={true}
                 name="email"
                 type="email"

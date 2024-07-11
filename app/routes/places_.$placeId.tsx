@@ -25,7 +25,7 @@ export default function PlacesPage() {
               <li key={item.id}>
                 {item.name} - {item.note}
                 <Form method="post" action={`items/${item.id}/destroy`}>
-                  <button>DELETE</button>
+                  <button type="submit">DELETE</button>
                 </Form>
                 <Link to={`items/${item.id}/edit`}>Edit</Link>
               </li>
