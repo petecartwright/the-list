@@ -47,7 +47,7 @@ async function seed() {
     { name: "diet coke", note: "debatably best version of diet coke" },
   ];
 
-  mcDonaldsItems.forEach(async (item) => {
+  for (const item of mcDonaldsItems) {
     await prisma.item.create({
       data: {
         name: item.name,
@@ -56,7 +56,7 @@ async function seed() {
         placeId: mcDonalds.id,
       },
     });
-  });
+  }
 
   const tacoBell = await prisma.place.create({
     data: {
@@ -74,7 +74,7 @@ async function seed() {
     },
   ];
 
-  tacoBellItemsText.forEach(async (item) => {
+  for (const item of tacoBellItemsText) {
     await prisma.item.create({
       data: {
         name: item.name,
@@ -83,9 +83,9 @@ async function seed() {
         placeId: tacoBell.id,
       },
     });
-  });
+  }
 
-  console.log(`Database has been seeded. 🌱`);
+  console.log("Database has been seeded. 🌱");
 }
 
 seed()
