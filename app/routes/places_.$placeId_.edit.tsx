@@ -6,6 +6,7 @@ import {
 import { Form, redirect, useActionData, useLoaderData } from "@remix-run/react";
 import { useRef } from "react";
 import invariant from "tiny-invariant";
+import { DestroyPlaceDialogOrDrawer } from "~/components/DestroyPlaceDialogOrDrawer";
 
 import { getPlace, updatePlace } from "~/models/place.server";
 import { requireUserId } from "~/session.server";
@@ -32,14 +33,14 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
   if (typeof name !== "string" || name.length === 0) {
     return json(
       { errors: { name: "name is required", note: null } },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
   if (typeof note !== "string") {
     return json(
       { errors: { name: null, note: "note is required" } },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -60,7 +61,7 @@ export default function PlaceEditor() {
   const nameRef = useRef<HTMLInputElement>(null);
   const noteRef = useRef<HTMLInputElement>(null);
 
-  return (
+  return data.place ? (
     <>
       <div>Editing {data.place?.name} </div>
       <Form method="post">
@@ -82,6 +83,8 @@ export default function PlaceEditor() {
         ) : null}
         <button type="submit">Submit</button>
       </Form>
+      <DestroyPlaceDialogOrDrawer placeId={data.place.id} />
     </>
-  );
+  ) : // TODO: show error here?
+  null;
 }

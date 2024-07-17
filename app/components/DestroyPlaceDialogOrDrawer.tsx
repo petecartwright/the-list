@@ -22,16 +22,16 @@ import {
 import type { Item, Place, User } from "@prisma/client";
 import { useNavigate } from "@remix-run/react";
 
-interface DestroyItemDialogOrDrawerProps {
-  itemId: Item["id"];
+interface DestroyPlaceDialogOrDrawerProps {
   placeId: Place["id"];
 }
 
-export const DestroyItemDialogOrDrawer = ({
-  itemId,
+export const DestroyPlaceDialogOrDrawer = ({
   placeId,
-}: DestroyItemDialogOrDrawerProps) => {
+}: DestroyPlaceDialogOrDrawerProps) => {
   // gently borrowed from shadn docs here: https://ui.shadcn.com/docs/components/drawer#responsive-dialog
+
+  // TODO: is there a good way to combine this and Destroy**Item**DialogOrDrawer? maybe not worth it?
 
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -39,10 +39,10 @@ export const DestroyItemDialogOrDrawer = ({
 
   const handleDelete = async () => {
     // TODO: error handling?
-    await fetch(`/places/${placeId}/items/${itemId}/destroy`, {
+    await fetch(`/places/${placeId}/destroy`, {
       method: "post",
     });
-    navigate(`/places/${placeId}`);
+    navigate("/places");
   };
 
   if (isDesktop) {
@@ -55,12 +55,12 @@ export const DestroyItemDialogOrDrawer = ({
           <DialogHeader>
             <DialogTitle>Are you sure?</DialogTitle>
             <DialogDescription>
-              This will delete this item permanently. This is not reversible.
+              This will delete this place and all associated items permanently.
+              This is not reversible.
             </DialogDescription>
           </DialogHeader>
-          {/* TODO: style */}
-          <Button>Yes, I'm sure. Delete it.</Button>
-          <Button>Cancel. Don't delete anything.</Button>
+          <Button>I'm sure, delete</Button>
+          <Button>Cancel. Don't delete.</Button>
         </DialogContent>
       </Dialog>
     );
@@ -72,16 +72,17 @@ export const DestroyItemDialogOrDrawer = ({
         <Button variant="outline">Delete</Button>
       </DrawerTrigger>
       <DrawerContent>
-        <DrawerHeader className="text-left">
+        <DrawerHeader>
           <DrawerTitle>Are you sure?</DrawerTitle>
           <DrawerDescription>
-            This will delete this item permanently. This is not reversible.
+            This will delete this place and all associated items permanently.
+            This is not reversible.
           </DrawerDescription>
         </DrawerHeader>
-        <Button onClick={handleDelete}>Yes, I'm sure. Delete it.</Button>
+        <Button onClick={handleDelete}>I'm sure, delete</Button>
 
         <DrawerClose asChild>
-          <Button>Cancel. Don't delete anything.</Button>
+          <Button>Cancel. Don't delete.</Button>
         </DrawerClose>
       </DrawerContent>
     </Drawer>

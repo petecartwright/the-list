@@ -87,5 +87,6 @@ export default function PlaceEditor() {
         placeId={data.place.id}
       />
     </>
-  ) : null;
+  ) : // TODO: show error here?
+  null;
 }
