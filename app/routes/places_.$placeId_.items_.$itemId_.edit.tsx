@@ -8,6 +8,8 @@ import { useRef } from "react";
 import invariant from "tiny-invariant";
 import { DestroyItemDialogOrDrawer } from "~/components/DestroyItemDialogOrDrawer";
 import { Header } from "~/components/header";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
 
 import { getItem, updateItem } from "~/models/item.server";
 import { getPlace } from "~/models/place.server";
@@ -77,14 +79,16 @@ export default function PlaceEditor() {
       </div>
       <Form method="post">
         <label htmlFor="name">Name</label>
-        <input ref={nameRef} name="name" defaultValue={data.item?.name || ""} />
+        <Input ref={nameRef} name="name" defaultValue={data.item?.name || ""} />
         {actionData?.errors.name ? actionData?.errors.name : null}
         <label htmlFor="note">Note</label>
-        <input ref={noteRef} name="note" defaultValue={data.item?.note || ""} />
+        <Input ref={noteRef} name="note" defaultValue={data.item?.note || ""} />
         {actionData?.errors.note ? (
           <span>{actionData?.errors.note}</span>
         ) : null}
-        <button type="submit">Submit</button>
+        <Button type="submit" variant="outline">
+          Submit
+        </Button>
       </Form>
       <DestroyItemDialogOrDrawer
         itemId={data.item.id}

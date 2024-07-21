@@ -2,6 +2,8 @@ import { type ActionFunctionArgs, json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { Header } from "~/components/header";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
 
 import { createPlace } from "~/models/place.server";
 import { requireUserId } from "~/session.server";
@@ -56,14 +58,14 @@ export default function NewPlacePage() {
       <div>NEW PLACE</div>
       <Form method="post">
         <label htmlFor="name">Name</label>
-        <input ref={nameRef} name="name" />
+        <Input ref={nameRef} name="name" />
         {actionData?.errors.name ? actionData?.errors.name : null}
         <label htmlFor="note">Note</label>
-        <input ref={noteRef} name="note" />
+        <Input ref={noteRef} name="note" />
         {actionData?.errors.note ? (
           <span>{actionData?.errors.note}</span>
         ) : null}
-        <button type="submit">Submit</button>
+        <Button type="submit">Submit</Button>
       </Form>
     </>
   );

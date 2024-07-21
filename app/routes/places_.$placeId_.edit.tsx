@@ -8,6 +8,8 @@ import { useRef } from "react";
 import invariant from "tiny-invariant";
 import { DestroyPlaceDialogOrDrawer } from "~/components/DestroyPlaceDialogOrDrawer";
 import { Header } from "~/components/header";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
 
 import { getPlace, updatePlace } from "~/models/place.server";
 import { requireUserId } from "~/session.server";
@@ -70,14 +72,14 @@ export default function PlaceEditor() {
       <div>Editing {data.place?.name} </div>
       <Form method="post">
         <label htmlFor="name">Name</label>
-        <input
+        <Input
           ref={nameRef}
           name="name"
           defaultValue={data.place?.name || ""}
         />
         {actionData?.errors.name ? actionData?.errors.name : null}
         <label htmlFor="note">Note</label>
-        <input
+        <Input
           ref={noteRef}
           name="note"
           defaultValue={data.place?.note || ""}
@@ -85,7 +87,7 @@ export default function PlaceEditor() {
         {actionData?.errors.note ? (
           <span>{actionData?.errors.note}</span>
         ) : null}
-        <button type="submit">Submit</button>
+        <Button type="submit">Submit</Button>
       </Form>
       <DestroyPlaceDialogOrDrawer placeId={data.place.id} />
     </>

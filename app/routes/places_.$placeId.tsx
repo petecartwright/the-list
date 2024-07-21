@@ -2,6 +2,7 @@ import { type LoaderFunctionArgs, json } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
 import { Header } from "~/components/header";
+import { Button } from "~/components/ui/button";
 
 import { getPlaceWithItems } from "~/models/place.server";
 import { requireUserId } from "~/session.server";
@@ -29,7 +30,7 @@ export default function PlacesPage() {
               <li key={item.id}>
                 {item.name} - {item.note}
                 <Form method="post" action={`items/${item.id}/destroy`}>
-                  <button type="submit">DELETE</button>
+                  <Button type="submit">DELETE</Button>
                 </Form>
                 <Link to={`items/${item.id}/edit`}>Edit</Link>
               </li>
