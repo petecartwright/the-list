@@ -59,7 +59,7 @@ export const DestroyItemDialogOrDrawer = ({
             </DialogDescription>
           </DialogHeader>
           {/* TODO: style */}
-          <Button>Yes, I'm sure. Delete it.</Button>
+          <Button onClick={handleDelete}>I'm sure, delete</Button>
           <Button>Cancel. Don't delete anything.</Button>
         </DialogContent>
       </Dialog>

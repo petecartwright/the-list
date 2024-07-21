@@ -1,9 +1,11 @@
 import { type LoaderFunctionArgs, json } from "@remix-run/node";
 import { Form, Link, useLoaderData } from "@remix-run/react";
 import invariant from "tiny-invariant";
+import { Header } from "~/components/header";
 
 import { getPlaceWithItems } from "~/models/place.server";
 import { requireUserId } from "~/session.server";
+import { useUser } from "~/utils";
 
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
   const userId = await requireUserId(request);
@@ -14,9 +16,11 @@ export const loader = async ({ params, request }: LoaderFunctionArgs) => {
 
 export default function PlacesPage() {
   const data = useLoaderData<typeof loader>();
+  const user = useUser();
 
   return data.place ? (
     <div>
+      <Header user={user} />
       <h1>{data.place?.name}</h1>
       <div>
         <ul>
@@ -38,11 +42,6 @@ export default function PlacesPage() {
       </div>
       <div>
         <Link to="edit">Edit</Link>
-      </div>
-      <div>
-        <Form action="destroy" method="post">
-          <button type="submit">DELETE</button>
-        </Form>
       </div>
     </div>
   ) : (

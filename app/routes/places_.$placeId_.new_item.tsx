@@ -7,10 +7,12 @@ import {
 import { Form, redirect, useActionData, useLoaderData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import invariant from "tiny-invariant";
+import { Header } from "~/components/header";
 
 import { createItem } from "~/models/item.server";
 import { getPlace } from "~/models/place.server";
 import { requireUserId } from "~/session.server";
+import { useUser } from "~/utils";
 
 // TODO: loader to show place name
 export const loader = async ({ params, request }: LoaderFunctionArgs) => {
@@ -33,14 +35,14 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
   if (typeof name !== "string" || name.length === 0) {
     return json(
       { errors: { name: "name is required", note: null } },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
   if (typeof note !== "string") {
     return json(
       { errors: { name: null, note: "note is required" } },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -57,6 +59,8 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 export default function NewPlacePage() {
   const data = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
+  const user = useUser();
+
   const nameRef = useRef<HTMLInputElement>(null);
   const noteRef = useRef<HTMLInputElement>(null);
 
@@ -70,6 +74,7 @@ export default function NewPlacePage() {
 
   return (
     <>
+      <Header user={user} />
       <h1>{data.place?.name}</h1>
       <div>NEW ITEM</div>
       <Form method="post">

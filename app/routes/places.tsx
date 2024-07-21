@@ -1,7 +1,9 @@
 import { type LoaderFunctionArgs, json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
+import { Plus } from "lucide-react";
 
 import { Header } from "~/components/header";
+import { Button, buttonVariants } from "~/components/ui/button";
 import { getPlaceList } from "~/models/place.server";
 import { requireUserId } from "~/session.server";
 import { useUser } from "~/utils";
@@ -27,14 +29,19 @@ export default function PlacesPage() {
             return (
               <li key={place.id}>
                 <Link to={place.id}>{place.name}</Link>
-                {place.note ? <>: {place.note} </> : null}
+                {place.note ? <>: {place.note} </> : null} ({place._count.items}{" "}
+                items)
               </li>
             );
           })}
         </ol>
       </div>
       <div>
-        <Link to="new">New Place</Link>
+        <Button variant="outline" asChild>
+          <Link to="new">
+            <Plus /> New Place
+          </Link>
+        </Button>
       </div>
     </div>
   );

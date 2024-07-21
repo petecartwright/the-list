@@ -59,8 +59,10 @@ export const DestroyPlaceDialogOrDrawer = ({
               This is not reversible.
             </DialogDescription>
           </DialogHeader>
-          <Button>I'm sure, delete</Button>
-          <Button>Cancel. Don't delete.</Button>
+          <Button onClick={handleDelete}>I'm sure, delete</Button>
+          <DrawerClose asChild>
+            <Button>Cancel. Don't delete.</Button>
+          </DrawerClose>
         </DialogContent>
       </Dialog>
     );

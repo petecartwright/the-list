@@ -1,9 +1,11 @@
 import { type ActionFunctionArgs, json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
+import { Header } from "~/components/header";
 
 import { createPlace } from "~/models/place.server";
 import { requireUserId } from "~/session.server";
+import { useUser } from "~/utils";
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const userId = await requireUserId(request);
@@ -16,7 +18,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (typeof name !== "string" || name.length === 0) {
     return json(
       { errors: { name: "name is required", note: null } },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -24,7 +26,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (typeof note !== "string") {
     return json(
       { errors: { name: null, note: "note is required" } },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -35,6 +37,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 export default function NewPlacePage() {
   const actionData = useActionData<typeof action>();
+  const user = useUser();
+
   const nameRef = useRef<HTMLInputElement>(null);
   const noteRef = useRef<HTMLInputElement>(null);
 
@@ -48,6 +52,7 @@ export default function NewPlacePage() {
 
   return (
     <>
+      <Header user={user} />
       <div>NEW PLACE</div>
       <Form method="post">
         <label htmlFor="name">Name</label>

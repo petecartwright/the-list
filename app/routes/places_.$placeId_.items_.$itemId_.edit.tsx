@@ -7,10 +7,12 @@ import { Form, redirect, useActionData, useLoaderData } from "@remix-run/react";
 import { useRef } from "react";
 import invariant from "tiny-invariant";
 import { DestroyItemDialogOrDrawer } from "~/components/DestroyItemDialogOrDrawer";
+import { Header } from "~/components/header";
 
 import { getItem, updateItem } from "~/models/item.server";
 import { getPlace } from "~/models/place.server";
 import { requireUserId } from "~/session.server";
+import { useUser } from "~/utils";
 
 // TODO: the only real diff here is CREATE vs UPDATE - can this be one component?
 
@@ -62,12 +64,14 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
 export default function PlaceEditor() {
   const data = useLoaderData<typeof loader>();
   const actionData = useActionData<typeof action>();
+  const user = useUser();
 
   const nameRef = useRef<HTMLInputElement>(null);
   const noteRef = useRef<HTMLInputElement>(null);
 
   return data.place?.id && data.item?.id ? (
     <>
+      <Header user={user} />
       <div>
         Editing {data.item?.name} at {data.place?.name}{" "}
       </div>
