@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { Header } from "~/components/header";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 
 import { createPlace } from "~/models/place.server";
 import { requireUserId } from "~/session.server";
@@ -57,15 +58,17 @@ export default function NewPlacePage() {
       <Header user={user} />
       <div>NEW PLACE</div>
       <Form method="post">
-        <label htmlFor="name">Name</label>
+        <Label htmlFor="name">Name</Label>
         <Input ref={nameRef} name="name" />
         {actionData?.errors.name ? actionData?.errors.name : null}
-        <label htmlFor="note">Note</label>
+        <Label htmlFor="note">Note</Label>
         <Input ref={noteRef} name="note" />
         {actionData?.errors.note ? (
           <span>{actionData?.errors.note}</span>
         ) : null}
-        <Button type="submit">Submit</Button>
+        <Button variant="outline" type="submit">
+          Submit
+        </Button>
       </Form>
     </>
   );

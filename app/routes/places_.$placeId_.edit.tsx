@@ -10,6 +10,7 @@ import { DestroyPlaceDialogOrDrawer } from "~/components/DestroyPlaceDialogOrDra
 import { Header } from "~/components/header";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 
 import { getPlace, updatePlace } from "~/models/place.server";
 import { requireUserId } from "~/session.server";
@@ -71,14 +72,14 @@ export default function PlaceEditor() {
       <Header user={user} />
       <div>Editing {data.place?.name} </div>
       <Form method="post">
-        <label htmlFor="name">Name</label>
+        <Label htmlFor="name">Name</Label>
         <Input
           ref={nameRef}
           name="name"
           defaultValue={data.place?.name || ""}
         />
         {actionData?.errors.name ? actionData?.errors.name : null}
-        <label htmlFor="note">Note</label>
+        <Label htmlFor="note">Note</Label>
         <Input
           ref={noteRef}
           name="note"
@@ -87,7 +88,9 @@ export default function PlaceEditor() {
         {actionData?.errors.note ? (
           <span>{actionData?.errors.note}</span>
         ) : null}
-        <Button type="submit">Submit</Button>
+        <Button name="regularSubmit" type="submit">
+          Submit
+        </Button>
       </Form>
       <DestroyPlaceDialogOrDrawer placeId={data.place.id} />
     </>

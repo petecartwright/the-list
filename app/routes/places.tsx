@@ -22,21 +22,27 @@ export default function PlacesPage() {
   return (
     <div>
       <Header user={user} />
-      <h1>PLACES</h1>
-      <div>
-        <ol>
+      <div className="flex justify-center my-9">
+        <p className="text-3xl">PLACES</p>
+      </div>
+      <div className="mb-10">
+        <ul>
           {data.placeList.map((place) => {
             return (
               <li key={place.id}>
-                <Link to={place.id}>{place.name}</Link>
-                {place.note ? <>: {place.note} </> : null} ({place._count.items}{" "}
-                items)
+                {/* TODO: mx56 is not what i actually want her*/}
+                <span className="flex justify-between items-center mx-56 my-4">
+                  <Link to={place.id}>{place.name}</Link>
+                  {place.note ? <>: {place.note} </> : null} (
+                  {place._count.items} items)
+                </span>
               </li>
             );
           })}
-        </ol>
+        </ul>
       </div>
-      <div>
+      {/* TODO: mx56 is not what i actually want her*/}
+      <div className="flex justify-end mx-56">
         <Button variant="outline" asChild>
           <Link to="new">
             <Plus /> New Place

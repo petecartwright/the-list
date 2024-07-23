@@ -59,8 +59,12 @@ export const DestroyItemDialogOrDrawer = ({
             </DialogDescription>
           </DialogHeader>
           {/* TODO: style */}
-          <Button onClick={handleDelete}>I'm sure, delete</Button>
-          <Button>Cancel. Don't delete anything.</Button>
+          <Button variant="destructive" onClick={handleDelete}>
+            I'm sure, delete
+          </Button>
+          <DrawerClose asChild>
+            <Button>Cancel. Don't delete anything.</Button>
+          </DrawerClose>
         </DialogContent>
       </Dialog>
     );
@@ -78,11 +82,16 @@ export const DestroyItemDialogOrDrawer = ({
             This will delete this item permanently. This is not reversible.
           </DrawerDescription>
         </DrawerHeader>
-        <Button onClick={handleDelete}>Yes, I'm sure. Delete it.</Button>
+        {/* <div className="flex flex-col "> */}
+        {/* TODO: make these buttons look as nice as the ones on the modal */}
+        <Button variant="destructive" className="mb-5" onClick={handleDelete}>
+          Yes, I'm sure. Delete it.
+        </Button>
 
-        <DrawerClose asChild>
+        <DrawerClose asChild className="mb-51 ">
           <Button>Cancel. Don't delete anything.</Button>
         </DrawerClose>
+        {/* </div> */}
       </DrawerContent>
     </Drawer>
   );

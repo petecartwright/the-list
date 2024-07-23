@@ -10,6 +10,7 @@ import { DestroyItemDialogOrDrawer } from "~/components/DestroyItemDialogOrDrawe
 import { Header } from "~/components/header";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 
 import { getItem, updateItem } from "~/models/item.server";
 import { getPlace } from "~/models/place.server";
@@ -78,10 +79,10 @@ export default function PlaceEditor() {
         Editing {data.item?.name} at {data.place?.name}{" "}
       </div>
       <Form method="post">
-        <label htmlFor="name">Name</label>
+        <Label htmlFor="name">Name</Label>
         <Input ref={nameRef} name="name" defaultValue={data.item?.name || ""} />
         {actionData?.errors.name ? actionData?.errors.name : null}
-        <label htmlFor="note">Note</label>
+        <Label htmlFor="note">Note</Label>
         <Input ref={noteRef} name="note" defaultValue={data.item?.note || ""} />
         {actionData?.errors.note ? (
           <span>{actionData?.errors.note}</span>
