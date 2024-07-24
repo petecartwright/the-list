@@ -37,7 +37,11 @@ export default function PlacesPage() {
                     {item.note}
                   </p>
                   <div className="flex">
-                    <Form method="post" action={`items/${item.id}/destroy`}>
+                    <Form
+                      method="post"
+                      preventScrollReset={true}
+                      action={`items/${item.id}/destroy`}
+                    >
                       <Button variant="ghost" type="submit" size="sm">
                         <Trash2 size="10" />
                       </Button>
