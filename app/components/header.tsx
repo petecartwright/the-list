@@ -10,7 +10,7 @@ interface IHeaderProps {
 export const Header = ({ user }: IHeaderProps) => {
   return (
     <>
-      <div className="flex justify-between mx-4 py-2 items-center">
+      <div className="flex justify-around mx-4 py-2 items-center">
         <Link to="/places">
           {" "}
           <h1>The List</h1>
@@ -26,6 +26,7 @@ export const Header = ({ user }: IHeaderProps) => {
           <Link to="/login">Login</Link>
         )}
       </div>
+
       <Separator className="mx-6 w-auto" />
     </>
   );
