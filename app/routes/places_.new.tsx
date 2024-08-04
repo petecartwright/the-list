@@ -56,20 +56,29 @@ export default function NewPlacePage() {
   return (
     <>
       <Header user={user} />
-      <div>NEW PLACE</div>
-      <Form method="post">
-        <Label htmlFor="name">Name</Label>
-        <Input ref={nameRef} name="name" />
-        {actionData?.errors.name ? actionData?.errors.name : null}
-        <Label htmlFor="note">Note</Label>
-        <Input ref={noteRef} name="note" />
-        {actionData?.errors.note ? (
-          <span>{actionData?.errors.note}</span>
-        ) : null}
-        <Button variant="outline" type="submit">
-          Submit
-        </Button>
-      </Form>
+      {/* // TODO: move this to a common layout component for new place and new item? */}
+      <div className="m-auto w-2/3 md:w-1/2 mb-5">
+        <div className="mt-8 mb-6 text-center w-full font-bold text-4xl">
+          NEW PLACE
+        </div>
+        <Form method="post">
+          <div className="mb-6">
+            <Label htmlFor="name">Name</Label>
+            <Input ref={nameRef} name="name" />
+            {actionData?.errors.name ? actionData?.errors.name : null}
+          </div>
+          <div className="mb-8">
+            <Label htmlFor="note">Note</Label>
+            <Input ref={noteRef} name="note" />
+            {actionData?.errors.note ? (
+              <span>{actionData?.errors.note}</span>
+            ) : null}
+          </div>
+          <Button variant="outline" type="submit">
+            Submit
+          </Button>
+        </Form>
+      </div>
     </>
   );
 }

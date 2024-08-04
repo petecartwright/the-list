@@ -93,6 +93,7 @@ export default function NewPlacePage() {
       console.log("resetting form");
       formRef.current.reset();
     }
+    // TODO: would be nice to pop a "saved!" toast here too
   }, [location.search]);
 
   useEffect(() => {
@@ -106,31 +107,40 @@ export default function NewPlacePage() {
   return (
     <>
       <Header user={user} />
-      <h1>
-        <Link to={`/places/${data.place?.id}`}>{data.place?.name}</Link>
-      </h1>
-      <div>NEW ITEM</div>
-      <Form method="post" ref={formRef}>
-        <Label htmlFor="name">Name</Label>
-        <Input ref={nameRef} name="name" />
-        {actionData?.errors.name ? actionData?.errors.name : null}
-        <Label htmlFor="note">Note</Label>
-        <Input ref={noteRef} name="note" />
-        {actionData?.errors.note ? (
-          <span>{actionData?.errors.note}</span>
-        ) : null}
-        <Button
-          variant="outline"
-          name="submitAndCreateAnother"
-          value="yes"
-          type="submit"
-        >
-          Submit and Create Another
-        </Button>
-        <Button variant="outline" type="submit">
-          Submit
-        </Button>
-      </Form>
+      <div className="m-auto w-2/3 md:w-1/2 mb-5">
+        <div className="mt-8 mb-6 text-center w-full font-bold text-4xl">
+          NEW ITEM at{" "}
+          <Link to={`/places/${data.place?.id}`}>{data.place?.name}</Link>
+        </div>
+
+        <Form method="post" ref={formRef}>
+          <div className="mb-6">
+            <Label htmlFor="name">Name</Label>
+            <Input ref={nameRef} name="name" />
+            {actionData?.errors.name ? actionData?.errors.name : null}
+          </div>
+          <div className="mb-8">
+            <Label htmlFor="note">Note</Label>
+            <Input ref={noteRef} name="note" />
+            {actionData?.errors.note ? (
+              <span>{actionData?.errors.note}</span>
+            ) : null}
+          </div>
+
+          <Button
+            className="mr-6"
+            name="submitAndCreateAnother"
+            type="submit"
+            value="yes"
+            variant="outline"
+          >
+            Submit and Create Another
+          </Button>
+          <Button variant="outline" type="submit">
+            Submit
+          </Button>
+        </Form>
+      </div>
     </>
   );
 }

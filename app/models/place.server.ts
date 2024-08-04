@@ -32,6 +32,9 @@ export function getPlaceList({ userId }: { userId: User["id"] }) {
       id: true,
       name: true,
       note: true,
+      createdAt: true,
+      updatedAt: true,
+      userId: true,
       _count: {
         select: { items: true },
       },

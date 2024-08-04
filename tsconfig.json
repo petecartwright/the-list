@@ -10,7 +10,7 @@
     "module": "CommonJS",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "target": "ES2020",
+    "target": "ESNext",
     "strict": true,
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
@@ -19,7 +19,6 @@
       "~/*": ["./app/*"]
     },
     "skipLibCheck": true,
-
 
     // Remix takes care of building everything in `remix build`.
     "noEmit": true
