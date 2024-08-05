@@ -50,33 +50,11 @@ const placesSort = ({
   switch (sortMethod) {
     case "alphabetical":
       return placesList.toSorted((a, b) => {
-        console.log("in regular:");
-        console.log("\t a.name", a.name);
-        console.log("\t b.name", b.name);
-        console.log(
-          "\t a.name.toLowerCase() < b.name.toLowerCase()",
-          a.name.toLowerCase() < b.name.toLowerCase()
-        );
-        console.log(
-          "\t a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;",
-          a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1
-        );
         return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
       });
 
     case "alphabetical-reverse":
       return placesList.toSorted((a, b) => {
-        console.log("in reverse:");
-        console.log("\t a.name", a.name);
-        console.log("\t b.name", b.name);
-        console.log(
-          "\t a.name.toLowerCase() > b.name.toLowerCase()",
-          a.name.toLowerCase() > b.name.toLowerCase()
-        );
-        console.log(
-          "\t a.name.toLowerCase() > b.name.toLowerCase() ? -1 : 1;",
-          a.name.toLowerCase() > b.name.toLowerCase() ? -1 : 1
-        );
         return a.name.toLowerCase() > b.name.toLowerCase() ? -1 : 1;
       });
     case "first-visited":
@@ -110,7 +88,6 @@ export default function PlacesPage() {
       sortMethod: sortMethod,
     });
 
-    console.log("about to set sortedPlaces to ", sortedPlaces);
     // @ts-ignore
     setSortedPlaces(sortedPlaces);
   };
@@ -151,7 +128,6 @@ export default function PlacesPage() {
         </div>
         <ul>
           {sortedPlaces.map((place) => {
-            console.log("rendering, place is ", place);
             return (
               <li key={place.id}>
                 <Link to={place.id}>

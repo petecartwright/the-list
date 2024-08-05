@@ -21,6 +21,7 @@ import {
 
 import type { Item, Place, User } from "@prisma/client";
 import { useNavigate } from "@remix-run/react";
+import { Trash2 } from "lucide-react";
 
 interface DestroyItemDialogOrDrawerProps {
   itemId: Item["id"];
@@ -49,7 +50,9 @@ export const DestroyItemDialogOrDrawer = ({
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button variant="outline">Delete</Button>
+          <Button variant="ghost">
+            <Trash2 size="18" />
+          </Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
@@ -58,7 +61,6 @@ export const DestroyItemDialogOrDrawer = ({
               This will delete this item permanently. This is not reversible.
             </DialogDescription>
           </DialogHeader>
-          {/* TODO: style */}
           <Button variant="destructive" onClick={handleDelete}>
             I'm sure, delete
           </Button>
@@ -73,25 +75,27 @@ export const DestroyItemDialogOrDrawer = ({
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button variant="outline">Delete</Button>
+        <Button variant="ghost">
+          <Trash2 size="18" />
+        </Button>
       </DrawerTrigger>
       <DrawerContent>
-        <DrawerHeader className="text-left">
+        <DrawerHeader>
           <DrawerTitle>Are you sure?</DrawerTitle>
           <DrawerDescription>
-            This will delete this item permanently. This is not reversible.
+            This will delete this item permanently. <br />
+            This is not reversible.
           </DrawerDescription>
         </DrawerHeader>
-        {/* <div className="flex flex-col "> */}
-        {/* TODO: make these buttons look as nice as the ones on the modal */}
-        <Button variant="destructive" className="mb-5" onClick={handleDelete}>
-          Yes, I'm sure. Delete it.
-        </Button>
+        <div className="mx-auto w-2/3 flex flex-col">
+          <Button variant="destructive" className="mb-5" onClick={handleDelete}>
+            Yes, I'm sure. Delete it.
+          </Button>
 
-        <DrawerClose asChild className="mb-51 ">
-          <Button>Cancel. Don't delete anything.</Button>
-        </DrawerClose>
-        {/* </div> */}
+          <DrawerClose asChild className="mb-10">
+            <Button>Cancel. Don't delete anything.</Button>
+          </DrawerClose>
+        </div>
       </DrawerContent>
     </Drawer>
   );

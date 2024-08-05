@@ -40,9 +40,6 @@ export const action = async ({ params, request }: ActionFunctionArgs) => {
   const note = formData.get("note");
 
   const userWantsToCreateAnother = formData.get("submitAndCreateAnother");
-  console.log("params :", params);
-  console.log("request :", request);
-  console.log("...formData.entries() :", ...formData.entries());
 
   invariant(params.placeId, "no placeId in url");
 
@@ -90,7 +87,6 @@ export default function NewPlacePage() {
     // if we were redirected here by this form, the URL will have a "created" search param
     // if that exists, clear the form, since it won't be on redirect to the same base URL
     if (formRef.current && location.search.includes("created")) {
-      console.log("resetting form");
       formRef.current.reset();
     }
     // TODO: would be nice to pop a "saved!" toast here too
