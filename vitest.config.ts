@@ -8,6 +8,12 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   test: {
+    coverage: {
+      exclude: [
+        // ...
+        "**/build/**",
+      ],
+    },
     globals: true,
     environment: "happy-dom",
     setupFiles: ["./test/setup-test-env.ts"],
