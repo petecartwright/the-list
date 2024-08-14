@@ -6,6 +6,7 @@ import type {
 import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 import { useEffect, useRef } from "react";
+import { Label } from "~/components/ui/label";
 
 import { verifyLogin } from "~/models/user.server";
 import { createUserSession, getUserId } from "~/session.server";
@@ -24,24 +25,43 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const redirectTo = safeRedirect(formData.get("redirectTo"), "/");
   const remember = formData.get("remember");
 
+  const PEOPLE_WHO_ARE_ALLOWED_TO_REGISTER = [
+    "pete@petecartwright.com",
+    "kuhn.laur@gmail.com",
+  ];
+
+  if (
+    email &&
+    PEOPLE_WHO_ARE_ALLOWED_TO_REGISTER.includes(
+      email.toString().toLocaleLowerCase()
+    )
+  ) {
+    return json(
+      {
+        errors: { email: "Only Pete and Laura can sign up rn", password: null },
+      },
+      { status: 400 }
+    );
+  }
+
   if (!validateEmail(email)) {
     return json(
       { errors: { email: "Email is invalid", password: null } },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
   if (typeof password !== "string" || password.length === 0) {
     return json(
       { errors: { email: null, password: "Password is required" } },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
   if (password.length < 8) {
     return json(
       { errors: { email: null, password: "Password is too short" } },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -50,13 +70,13 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (!user) {
     return json(
       { errors: { email: "Invalid email or password", password: null } },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
   return createUserSession({
     redirectTo,
-    remember: remember === "on" ? true : false,
+    remember: remember === "on",
     request,
     userId: user.id,
   });
@@ -66,7 +86,7 @@ export const meta: MetaFunction = () => [{ title: "Login" }];
 
 export default function LoginPage() {
   const [searchParams] = useSearchParams();
-  const redirectTo = searchParams.get("redirectTo") || "/notes";
+  const redirectTo = searchParams.get("redirectTo") || "/places";
   const actionData = useActionData<typeof action>();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
@@ -84,19 +104,17 @@ export default function LoginPage() {
       <div className="mx-auto w-full max-w-md px-8">
         <Form method="post" className="space-y-6">
           <div>
-            <label
+            <Label
               htmlFor="email"
               className="block text-sm font-medium text-gray-700"
             >
               Email address
-            </label>
+            </Label>
             <div className="mt-1">
               <input
                 ref={emailRef}
                 id="email"
                 required
-                // eslint-disable-next-line jsx-a11y/no-autofocus
-                autoFocus={true}
                 name="email"
                 type="email"
                 autoComplete="email"
@@ -113,12 +131,12 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <label
+            <Label
               htmlFor="password"
               className="block text-sm font-medium text-gray-700"
             >
               Password
-            </label>
+            </Label>
             <div className="mt-1">
               <input
                 id="password"
@@ -153,12 +171,12 @@ export default function LoginPage() {
                 type="checkbox"
                 className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
-              <label
+              <Label
                 htmlFor="remember"
                 className="ml-2 block text-sm text-gray-900"
               >
                 Remember me
-              </label>
+              </Label>
             </div>
             <div className="text-center text-sm text-gray-500">
               Don&apos;t have an account?{" "}

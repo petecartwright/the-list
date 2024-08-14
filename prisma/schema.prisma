@@ -29,9 +29,9 @@ model Password {
 }
 
 model Place {
-  id    String  @id @default(cuid())
-  title String
-  note  String?
+  id   String  @id @default(cuid())
+  name String
+  note String?
 
   items Item[]
 
@@ -44,7 +44,7 @@ model Place {
 
 model Item {
   id        String   @id @default(cuid())
-  title     String
+  name      String
   note      String?
   isStarred Boolean?
 
