@@ -9,10 +9,15 @@ export default defineConfig({
   plugins: [react(), tsconfigPaths()],
   test: {
     coverage: {
-      exclude: [
-        // ...
-        "**/build/**",
-      ],
+      exclude: ["**/build/**", "**/public/**"],
+      provider: "v8",
+      reporter: ["json", "html", "text", "text-summary"],
+      // TODO: figure out what level of coverage we're happy with here
+      //       for a non-revenue-generating personal project.
+
+      // thresholds: {
+      //   "100": true,
+      // },
     },
     globals: true,
     environment: "happy-dom",

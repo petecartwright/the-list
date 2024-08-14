@@ -94,7 +94,7 @@ jobs:
         run: npm install
 
       - name: ⚡ Run vitest
-        run: npm run test -- --coverage
+        run: npm run test:coverage
 
   cypress:
     name: ⚫️ Cypress
