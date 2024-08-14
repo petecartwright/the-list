@@ -24,11 +24,16 @@ export default function PlacesPage() {
   return data.place ? (
     <>
       <Header user={user} />
-      <div className="m-auto w-6/7 md:w-2/3">
-        <div className="flex justify-center my-9">
-          <p className="text-3xl">{data.place?.name}</p>
+      <div className="m-auto w-2/3 md:w-1/2">
+        <div className="flex justify-center my-9 font-bold text-4xl">
+          <span className="underline">{data.place?.name}</span>
         </div>
         <div className="mb-10">
+          {data.place.items.length === 0 && (
+            <div className="w-full text-center">
+              Nothing here yet.. let's add some items!
+            </div>
+          )}
           <ul>
             {data.place.items.map((item) => {
               return (
@@ -61,16 +66,21 @@ export default function PlacesPage() {
             })}
           </ul>
         </div>
-        <div className="flex justify-end mx-5">
-          <Button variant="outline" className="flex mx-5" asChild>
-            <Link to="new_item">
-              <Plus />
-              Add Item
-            </Link>
+        <div className="flex flex-row justify-between">
+          <Button asChild variant="outline">
+            <Link to={"/places"}>Back</Link>
           </Button>
-          <Button variant="outline" className="flex" asChild>
-            <Link to="edit">Edit</Link>
-          </Button>
+          <div className="flex flex-row gap-4">
+            <Button variant="outline" asChild>
+              <Link to="new_item">
+                <Plus />
+                Add Item
+              </Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link to="edit">Edit</Link>
+            </Button>
+          </div>
         </div>
       </div>
     </>

@@ -3,7 +3,13 @@ import {
   type LoaderFunctionArgs,
   json,
 } from "@remix-run/node";
-import { Form, redirect, useActionData, useLoaderData } from "@remix-run/react";
+import {
+  Form,
+  Link,
+  redirect,
+  useActionData,
+  useLoaderData,
+} from "@remix-run/react";
 import { useRef } from "react";
 import invariant from "tiny-invariant";
 import { DestroyItemDialogOrDrawer } from "~/components/DestroyItemDialogOrDrawer";
@@ -75,26 +81,50 @@ export default function PlaceEditor() {
   return data.place?.id && data.item?.id ? (
     <>
       <Header user={user} />
-      <div>
-        Editing {data.item?.name} at {data.place?.name}{" "}
+      <div className="m-auto w-2/3 md:w-1/2 mb-5">
+        <div className="mt-8 mb-6 text-center w-full font-bold text-4xl">
+          Editing <span className="italic">{data.item?.name}</span> at{" "}
+          <span className="underline">
+            <Link to={`/places/${data.place?.id}`}>{data.place?.name}</Link>
+          </span>
+        </div>
+        <Form method="post">
+          <div className="mb-6">
+            <Label htmlFor="name">Name</Label>
+            <Input
+              ref={nameRef}
+              name="name"
+              defaultValue={data.item?.name || ""}
+            />
+            {actionData?.errors.name ? actionData?.errors.name : null}
+          </div>
+          <div className="mb-8">
+            <Label htmlFor="note">Note</Label>
+            <Input
+              ref={noteRef}
+              name="note"
+              defaultValue={data.item?.note || ""}
+            />
+            {actionData?.errors.note ? (
+              <span>{actionData?.errors.note}</span>
+            ) : null}
+          </div>
+          <div className="w-full flex flex-row justify-between">
+            <Button asChild variant="outline">
+              <Link to={`/places/${data.place?.id}`}>Back</Link>
+            </Button>
+            <div className="flex flex-row justify-end gap-5">
+              <Button type="submit" variant="outline">
+                Save
+              </Button>
+              <DestroyItemDialogOrDrawer
+                itemId={data.item.id}
+                placeId={data.place.id}
+              />
+            </div>
+          </div>
+        </Form>
       </div>
-      <Form method="post">
-        <Label htmlFor="name">Name</Label>
-        <Input ref={nameRef} name="name" defaultValue={data.item?.name || ""} />
-        {actionData?.errors.name ? actionData?.errors.name : null}
-        <Label htmlFor="note">Note</Label>
-        <Input ref={noteRef} name="note" defaultValue={data.item?.note || ""} />
-        {actionData?.errors.note ? (
-          <span>{actionData?.errors.note}</span>
-        ) : null}
-        <Button type="submit" variant="outline">
-          Submit
-        </Button>
-      </Form>
-      <DestroyItemDialogOrDrawer
-        itemId={data.item.id}
-        placeId={data.place.id}
-      />
     </>
   ) : // TODO: show error here?
   null;

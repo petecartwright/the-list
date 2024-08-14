@@ -19,7 +19,6 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
@@ -76,8 +75,6 @@ export default function PlacesPage() {
 
   const DEFAULT_SORT_METHOD: PlacesSortMethod = "recently-visited";
 
-  // const [sortMethod, setSortMethod] =
-  //   useState<PlacesSortMethod>(DEFAULT_SORT_METHOD);
   const [sortedPlaces, setSortedPlaces] = useState(data.placeList);
 
   const handleSortChange = (sortMethod: PlacesSortMethod) => {
@@ -96,31 +93,36 @@ export default function PlacesPage() {
     <div>
       <Header user={user} />
       <div className="flex justify-center my-9">
-        <p className="text-3xl">PLACES</p>
+        <p className="text-4xl font-bold">PLACES</p>
       </div>
       <div className="mb-10">
-        <div className="m-auto w-2/3 md:w-1/2 mb-5 flex flex-row items-baseline gap-5 justify-end">
-          <Label htmlFor="sort-select">Sort by...</Label>
-          {/* // TODO: why is this so slow to populate?? */}
+        <div className="m-auto w-2/3 md:w-1/2 mb-5 flex flex-row justify-between">
+          <Button variant="outline" asChild>
+            <Link to="new">
+              <Plus /> New Place
+            </Link>
+          </Button>
 
           <Select
-            // TODO: I don't like this ignore - how do i tell TS that the select item value will be a PlacesSortMethod?*/}
-            name="sort-select"
-            // @ts-ignore
             onValueChange={handleSortChange}
             defaultValue={DEFAULT_SORT_METHOD}
           >
             <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Sort by..." />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectLabel>Sort by...</SelectLabel>
-                <SelectItem value="alphabetical">A-Z</SelectItem>
-                <SelectItem value="alphabetical-reverse">Z-A</SelectItem>
-                <SelectItem value="first-visited">First Visited</SelectItem>
+                <SelectItem value="alphabetical">
+                  <span className="text-xs">A-Z</span>
+                </SelectItem>
+                <SelectItem value="alphabetical-reverse">
+                  <span className="text-xs">Z-A</span>
+                </SelectItem>
+                <SelectItem value="first-visited">
+                  <span className="text-xs">First Visited</span>
+                </SelectItem>
                 <SelectItem value="recently-visited">
-                  Most Recently Visited
+                  <span className="text-xs">Most Recently Visited</span>
                 </SelectItem>
               </SelectGroup>
             </SelectContent>
@@ -137,7 +139,7 @@ export default function PlacesPage() {
                         <Link to={place.id}>{place.name}</Link>
                       </CardTitle>
                       <CardDescription>
-                        <span>{place.note ? <>: {place.note} </> : null}</span>
+                        <span>{place.note ? <> {place.note} </> : null}</span>
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="flex flex-row justify-between">
@@ -158,14 +160,7 @@ export default function PlacesPage() {
           })}
         </ul>
       </div>
-      {/* TODO: mx56 is not what i actually want her*/}
-      <div className="flex justify-end mx-56">
-        <Button variant="outline" asChild>
-          <Link to="new">
-            <Plus /> New Place
-          </Link>
-        </Button>
-      </div>
+      <div className="h-8" />
     </div>
   );
 }

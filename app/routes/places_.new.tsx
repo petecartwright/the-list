@@ -1,5 +1,5 @@
 import { type ActionFunctionArgs, json, redirect } from "@remix-run/node";
-import { Form, useActionData } from "@remix-run/react";
+import { Form, Link, useActionData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 import { Header } from "~/components/header";
 import { Button } from "~/components/ui/button";
@@ -74,9 +74,14 @@ export default function NewPlacePage() {
               <span>{actionData?.errors.note}</span>
             ) : null}
           </div>
-          <Button variant="outline" type="submit">
-            Submit
-          </Button>
+          <div className="flex flex-row justify-between">
+            <Button asChild variant="outline">
+              <Link to={"/places"}>Back</Link>
+            </Button>
+            <Button variant="outline" type="submit">
+              Submit
+            </Button>
+          </div>
         </Form>
       </div>
     </>

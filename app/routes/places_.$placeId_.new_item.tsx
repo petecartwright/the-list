@@ -105,8 +105,10 @@ export default function NewPlacePage() {
       <Header user={user} />
       <div className="m-auto w-2/3 md:w-1/2 mb-5">
         <div className="mt-8 mb-6 text-center w-full font-bold text-4xl">
-          NEW ITEM at{" "}
-          <Link to={`/places/${data.place?.id}`}>{data.place?.name}</Link>
+          <span className="italic">New Item</span> at{" "}
+          <span className="underline">
+            <Link to={`/places/${data.place?.id}`}>{data.place?.name}</Link>
+          </span>
         </div>
 
         <Form method="post" ref={formRef}>
@@ -123,18 +125,24 @@ export default function NewPlacePage() {
             ) : null}
           </div>
 
-          <Button
-            className="mr-6"
-            name="submitAndCreateAnother"
-            type="submit"
-            value="yes"
-            variant="outline"
-          >
-            Submit and Create Another
-          </Button>
-          <Button variant="outline" type="submit">
-            Submit
-          </Button>
+          <div className="w-full flex flex-row justify-between">
+            <Button asChild variant="outline">
+              <Link to={`/places/${data.place?.id}`}>Back</Link>
+            </Button>
+            <div className="w-full flex flex-row justify-end gap-4">
+              <Button
+                name="submitAndCreateAnother"
+                type="submit"
+                value="yes"
+                variant="outline"
+              >
+                Save and Create Another
+              </Button>
+              <Button variant="outline" type="submit">
+                Save
+              </Button>
+            </div>
+          </div>
         </Form>
       </div>
     </>
