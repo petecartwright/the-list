@@ -58,11 +58,11 @@ const placesSort = ({
       });
     case "first-visited":
       return placesList.toSorted((a, b) =>
-        a.createdAt < b.createdAt ? -1 : 1
+        a.createdAt < b.createdAt ? -1 : 1,
       );
     case "recently-visited":
       return placesList.toSorted((a, b) =>
-        a.createdAt > b.createdAt ? -1 : 1
+        a.createdAt > b.createdAt ? -1 : 1,
       );
   }
 };
