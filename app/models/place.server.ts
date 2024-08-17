@@ -44,6 +44,27 @@ export function getPlaceList({ userId }: { userId: User["id"] }) {
   });
 }
 
+export function getPlaceListWithItems({ userId }: { userId: User["id"] }) {
+  return prisma.place.findMany({
+    select: {
+      id: true,
+      name: true,
+      note: true,
+      createdAt: true,
+      updatedAt: true,
+      userId: true,
+      items: {
+        select: { name: true },
+      },
+      _count: {
+        select: { items: true },
+      },
+    },
+    where: { userId },
+    orderBy: { updatedAt: "desc" },
+  });
+}
+
 export function createPlace({
   name,
   note,
