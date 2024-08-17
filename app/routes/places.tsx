@@ -44,8 +44,6 @@ type PlacesSortMethod =
   | "first-visited"
   | "recently-visited";
 
-type SerializedPlaceList = SerializeFrom<typeof loader>;
-
 const placesSort = ({
   placesList,
   sortMethod,
@@ -103,28 +101,39 @@ export default function PlacesPage() {
 
   useEffect(
     function filterSortedResults() {
-      if (sortedPlaces) {
-        const filteredSortedResults = sortedPlaces.filter((place) => {
-          if (
-            place.name
-              .toLocaleLowerCase()
-              .includes(debouncedSearchTerm.toLocaleLowerCase())
-          ) {
-            return true;
-          }
-          // TODO: if items match, show them in the card
+      if (debouncedSearchTerm === "") {
+        setDisplayedPlaces(sortedPlaces);
+      } else {
+        const filteredSortedResults = [];
+
+        console.log("debouncedSearchTerm", debouncedSearchTerm);
+        // look for matching by items first so we can show the specific matching items
+        // in the card.
+        for (const place of sortedPlaces) {
+          const matchedItems = [];
           for (const item of place.items) {
             if (
               item.name
                 .toLocaleLowerCase()
                 .includes(debouncedSearchTerm.toLocaleLowerCase())
             ) {
-              return true;
+              matchedItems.push(item.name);
             }
           }
 
-          return false;
-        });
+          if (matchedItems.length > 0) {
+            filteredSortedResults.push({ ...place, matchedItems });
+          } else if (
+            place.name
+              .toLocaleLowerCase()
+              .includes(debouncedSearchTerm.toLocaleLowerCase())
+          ) {
+            filteredSortedResults.push({ ...place, matchedItems: undefined });
+          }
+
+          console.log(matchedItems);
+          // If we find matching items, don't filter by name bc we don't care
+        }
         setDisplayedPlaces(filteredSortedResults);
       }
     },
@@ -203,6 +212,9 @@ export default function PlacesPage() {
                       {`${place._count.items} item${
                         place._count.items === 1 ? "" : "s"
                       } `}
+                      {place.matchedItems?.length ? (
+                        <div>{place.matchedItems}</div>
+                      ) : null}
                     </span>
                   </CardContent>
                 </Card>
