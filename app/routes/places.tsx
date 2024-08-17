@@ -112,6 +112,17 @@ export default function PlacesPage() {
           ) {
             return true;
           }
+          // TODO: if items match, show them in the card
+          for (const item of place.items) {
+            if (
+              item.name
+                .toLocaleLowerCase()
+                .includes(debouncedSearchTerm.toLocaleLowerCase())
+            ) {
+              return true;
+            }
+          }
+
           return false;
         });
         setDisplayedPlaces(filteredSortedResults);
@@ -135,12 +146,12 @@ export default function PlacesPage() {
               </Link>
             </Button>
           </div>
-          <div className="flex flex-row items-center">
+          <div className="flex flex-row items-center gap-5">
             <div className="flex items-center py-4">
               <SearchIcon className="relative left-7 top-3 transform -translate-y-1/2 text-slate-400" />
               <Input
                 placeholder="Filter..."
-                className="max-w-sm pl-10"
+                className="pl-10"
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
