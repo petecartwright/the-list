@@ -4,7 +4,7 @@ import {
   json,
   type SerializeFrom,
 } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData, useSearchParams } from "@remix-run/react";
 import { Plus, SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -26,7 +26,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { useDebounce } from "~/lib/utils";
 import { getPlaceListWithItems } from "~/models/place.server";
 import { requireUserId } from "~/session.server";
 import { useUser } from "~/utils";
@@ -38,11 +37,14 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   return json({ placeList });
 };
 
-type PlacesSortMethod =
-  | "alphabetical"
-  | "alphabetical-reverse"
-  | "first-visited"
-  | "recently-visited";
+const VALID_SORT_METHODS = [
+  "alphabetical",
+  "alphabetical-reverse",
+  "first-visited",
+  "recently-visited",
+];
+
+const DEFAULT_SORT_METHOD = "recently-visited";
 
 const placesSort = ({
   placesList,
@@ -75,38 +77,72 @@ const placesSort = ({
 export default function PlacesPage() {
   const user = useUser();
   const data = useLoaderData<typeof loader>();
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const debouncedSearchTerm = useDebounce(searchTerm, 100);
 
-  // TODO: put the sort status in the URL?
-  // TODO: put the search term in the URL?
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const DEFAULT_SORT_METHOD: PlacesSortMethod = "recently-visited";
+  const searchTerm = searchParams.get("search") ?? "";
+
+  const handleSearchChange = (
+    event: React.SyntheticEvent<HTMLInputElement>
+  ) => {
+    const newSearchValue = event.currentTarget.value;
+    // if it's null or empty string or whatever
+    // remove the param from the URL altogether so it's not
+    // hanging around
+    if (!newSearchValue) {
+      searchParams.delete("search");
+      setSearchParams(searchParams);
+    } else {
+      setSearchParams(
+        (prev) => {
+          prev.set("search", event.currentTarget.value);
+          return prev;
+        },
+        { preventScrollReset: true }
+      );
+    }
+  };
+
+  const sortMethod = searchParams.get("sortMethod") ?? DEFAULT_SORT_METHOD;
+
+  const handleSortChange = (sortMethod: string) => {
+    if (VALID_SORT_METHODS.includes(sortMethod)) {
+      setSearchParams(
+        (prev) => {
+          prev.set("sortMethod", sortMethod);
+          return prev;
+        },
+        { preventScrollReset: true }
+      );
+    }
+  };
+
   const [sortedPlaces, setSortedPlaces] = useState<typeof data.placeList>(
     data.placeList
   );
   const [displayedPlaces, setDisplayedPlaces] = useState(data.placeList);
 
-  const handleSortChange = (sortMethod: PlacesSortMethod) => {
-    const sortedPlaces = placesSort({
-      // TODO: I don't like this ignore - i know the types here are fine but the difference is the JsonifyObject that remix generates
-      // @ts-ignore
-      placesList: data.placeList,
-      sortMethod: sortMethod,
-    });
+  useEffect(() => {
+    if (VALID_SORT_METHODS.includes(sortMethod)) {
+      const sortedPlaces = placesSort({
+        // TODO: I don't like this ignore - i know the types here are fine but the difference is the JsonifyObject that remix generates
+        // @ts-ignore
+        placesList: data.placeList,
+        sortMethod: sortMethod,
+      });
 
-    // @ts-ignore
-    setSortedPlaces(sortedPlaces);
-  };
+      // @ts-ignore
+      setSortedPlaces(sortedPlaces);
+    }
+  }, [sortMethod, data.placeList]);
 
   useEffect(
     function filterSortedResults() {
-      if (debouncedSearchTerm === "") {
+      if (!searchTerm) {
         setDisplayedPlaces(sortedPlaces);
       } else {
         const filteredSortedResults = [];
 
-        console.log("debouncedSearchTerm", debouncedSearchTerm);
         // look for matching by items first so we can show the specific matching items
         // in the card.
         for (const place of sortedPlaces) {
@@ -115,7 +151,7 @@ export default function PlacesPage() {
             if (
               item.name
                 .toLocaleLowerCase()
-                .includes(debouncedSearchTerm.toLocaleLowerCase())
+                .includes(searchTerm.toLocaleLowerCase())
             ) {
               matchedItems.push(item.name);
             }
@@ -126,7 +162,7 @@ export default function PlacesPage() {
           } else if (
             place.name
               .toLocaleLowerCase()
-              .includes(debouncedSearchTerm.toLocaleLowerCase())
+              .includes(searchTerm.toLocaleLowerCase())
           ) {
             filteredSortedResults.push({ ...place, matchedItems: undefined });
           }
@@ -137,7 +173,7 @@ export default function PlacesPage() {
         setDisplayedPlaces(filteredSortedResults);
       }
     },
-    [debouncedSearchTerm, sortedPlaces]
+    [searchTerm, sortedPlaces]
   );
 
   return (
@@ -161,7 +197,7 @@ export default function PlacesPage() {
               <Input
                 placeholder="Filter..."
                 className="pl-10"
-                onChange={(e) => setSearchTerm(e.target.value)}
+                onChange={handleSearchChange}
               />
             </div>
             <Select
