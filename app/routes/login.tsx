@@ -27,7 +27,8 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
   const PEOPLE_WHO_ARE_ALLOWED_TO_REGISTER = [
     "pete@petecartwright.com",
-    "kuhn.laur@gmail.com",
+    "kuhn.laura@gmail.com",
+    "rachel@remixrun.com",
   ];
 
   if (
