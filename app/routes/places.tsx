@@ -65,11 +65,11 @@ const placesSort = ({
       });
     case "first-visited":
       return placesList.toSorted((a, b) =>
-        a.createdAt < b.createdAt ? -1 : 1
+        a.createdAt < b.createdAt ? -1 : 1,
       );
     case "recently-visited":
       return placesList.toSorted((a, b) =>
-        a.createdAt > b.createdAt ? -1 : 1
+        a.createdAt > b.createdAt ? -1 : 1,
       );
   }
 };
@@ -83,7 +83,7 @@ export default function PlacesPage() {
   const searchTerm = searchParams.get("search") ?? "";
 
   const handleSearchChange = (
-    event: React.SyntheticEvent<HTMLInputElement>
+    event: React.SyntheticEvent<HTMLInputElement>,
   ) => {
     const newSearchValue = event.currentTarget.value;
     // if it's null or empty string or whatever
@@ -98,7 +98,7 @@ export default function PlacesPage() {
           prev.set("search", event.currentTarget.value);
           return prev;
         },
-        { preventScrollReset: true }
+        { preventScrollReset: true },
       );
     }
   };
@@ -112,13 +112,13 @@ export default function PlacesPage() {
           prev.set("sortMethod", sortMethod);
           return prev;
         },
-        { preventScrollReset: true }
+        { preventScrollReset: true },
       );
     }
   };
 
   const [sortedPlaces, setSortedPlaces] = useState<typeof data.placeList>(
-    data.placeList
+    data.placeList,
   );
   const [displayedPlaces, setDisplayedPlaces] = useState(data.placeList);
 
@@ -173,7 +173,7 @@ export default function PlacesPage() {
         setDisplayedPlaces(filteredSortedResults);
       }
     },
-    [searchTerm, sortedPlaces]
+    [searchTerm, sortedPlaces],
   );
 
   return (

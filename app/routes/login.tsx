@@ -34,35 +34,35 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (
     email &&
     PEOPLE_WHO_ARE_ALLOWED_TO_REGISTER.includes(
-      email.toString().toLocaleLowerCase()
+      email.toString().toLocaleLowerCase(),
     )
   ) {
     return json(
       {
         errors: { email: "Only Pete and Laura can sign up rn", password: null },
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   if (!validateEmail(email)) {
     return json(
       { errors: { email: "Email is invalid", password: null } },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   if (typeof password !== "string" || password.length === 0) {
     return json(
       { errors: { email: null, password: "Password is required" } },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   if (password.length < 8) {
     return json(
       { errors: { email: null, password: "Password is too short" } },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -71,7 +71,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (!user) {
     return json(
       { errors: { email: "Invalid email or password", password: null } },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
