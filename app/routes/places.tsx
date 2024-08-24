@@ -51,7 +51,7 @@ const placesSort = ({
   sortMethod,
 }: {
   placesList: Place[];
-  sortMethod: PlacesSortMethod;
+  sortMethod: string;
 }): Place[] => {
   switch (sortMethod) {
     case "alphabetical":
@@ -71,12 +71,27 @@ const placesSort = ({
       return placesList.toSorted((a, b) =>
         a.createdAt > b.createdAt ? -1 : 1,
       );
+    default:
+      return placesList;
   }
 };
+
+interface MatchedItemsMap {
+  [placeName: string]: string[];
+}
 
 export default function PlacesPage() {
   const user = useUser();
   const data = useLoaderData<typeof loader>();
+
+  const [sortedPlaces, setSortedPlaces] = useState<typeof data.placeList>(
+    data.placeList,
+  );
+  const [displayedPlaces, setDisplayedPlaces] = useState<typeof data.placeList>(
+    data.placeList,
+  );
+
+  const [matchedItems, setMatchedItems] = useState<MatchedItemsMap>();
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -117,11 +132,6 @@ export default function PlacesPage() {
     }
   };
 
-  const [sortedPlaces, setSortedPlaces] = useState<typeof data.placeList>(
-    data.placeList,
-  );
-  const [displayedPlaces, setDisplayedPlaces] = useState(data.placeList);
-
   useEffect(() => {
     if (VALID_SORT_METHODS.includes(sortMethod)) {
       const sortedPlaces = placesSort({
@@ -140,37 +150,37 @@ export default function PlacesPage() {
     function filterSortedResults() {
       if (!searchTerm) {
         setDisplayedPlaces(sortedPlaces);
+        setMatchedItems({});
       } else {
         const filteredSortedResults = [];
-
+        const matchingItems: MatchedItemsMap = {};
         // look for matching by items first so we can show the specific matching items
         // in the card.
         for (const place of sortedPlaces) {
-          const matchedItems = [];
+          const matchedItemsForThisPlace = [];
           for (const item of place.items) {
             if (
               item.name
                 .toLocaleLowerCase()
                 .includes(searchTerm.toLocaleLowerCase())
             ) {
-              matchedItems.push(item.name);
+              matchedItemsForThisPlace.push(item.name);
             }
           }
 
-          if (matchedItems.length > 0) {
-            filteredSortedResults.push({ ...place, matchedItems });
+          if (matchedItemsForThisPlace.length > 0) {
+            filteredSortedResults.push(place);
+            matchingItems[place.name] = matchedItemsForThisPlace;
           } else if (
             place.name
               .toLocaleLowerCase()
               .includes(searchTerm.toLocaleLowerCase())
           ) {
-            filteredSortedResults.push({ ...place, matchedItems: undefined });
+            filteredSortedResults.push(place);
           }
-
-          console.log(matchedItems);
-          // If we find matching items, don't filter by name bc we don't care
         }
         setDisplayedPlaces(filteredSortedResults);
+        setMatchedItems(matchingItems);
       }
     },
     [searchTerm, sortedPlaces],
@@ -228,6 +238,7 @@ export default function PlacesPage() {
         </div>
         <ul>
           {displayedPlaces.map((place) => {
+            const matchedItemsForPlace = matchedItems?.[place.name];
             return (
               <li key={place.id}>
                 <Card className="m-auto w-2/3 md:w-1/2 mb-5">
@@ -248,8 +259,8 @@ export default function PlacesPage() {
                       {`${place._count.items} item${
                         place._count.items === 1 ? "" : "s"
                       } `}
-                      {place.matchedItems?.length ? (
-                        <div>{place.matchedItems}</div>
+                      {matchedItemsForPlace?.length ? (
+                        <div>{matchedItemsForPlace}</div>
                       ) : null}
                     </span>
                   </CardContent>
