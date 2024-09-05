@@ -6,12 +6,15 @@
     "build": "remix build",
     "dev": "remix dev -c \"npm run dev:serve\" --manual",
     "dev:serve": "binode --require ./mocks -- @remix-run/serve:remix-serve ./build/index.js",
-    "format": "biome format --write .",
-    "lint": "biome lint --write",
+    "format": "biome format .",
+    "format:write": "biome format --write .",
+    "lint": "biome lint",
+    "lint:write": "biome lint --write",
     "setup": "prisma generate && prisma migrate deploy && prisma db seed",
     "start": "remix-serve ./build/index.js",
     "start:mocks": "binode --require ./mocks -- @remix-run/serve:remix-serve ./build/index.js",
     "test": "vitest",
+    "test:coverage": "vitest --coverage",
     "test:e2e:dev": "start-server-and-test dev http://localhost:3000 \"npx cypress open\"",
     "pretest:e2e:run": "npm run build",
     "test:e2e:run": "cross-env PORT=8811 start-server-and-test start:mocks http://localhost:8811 \"npx cypress run\"",
@@ -29,6 +32,7 @@
     "@remix-run/node": "^2.10.2",
     "@remix-run/react": "^2.10.2",
     "@remix-run/serve": "^2.10.2",
+    "@uidotdev/usehooks": "^2.4.1",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -80,8 +84,6 @@
     "seed": "ts-node -r tsconfig-paths/register prisma/seed.ts"
   },
   "msw": {
-    "workerDirectory": [
-      "public"
-    ]
+    "workerDirectory": ["public"]
   }
 }

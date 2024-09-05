@@ -5,6 +5,8 @@ node_modules
 /public/mockServiceWorker.js
 .env
 
+/coverage
+
 /cypress/screenshots
 /cypress/videos
 /prisma/data.db

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMediaQuery } from "~/hooks/useMediaQuery";
 import {
   Dialog,
@@ -37,6 +37,13 @@ export const DestroyItemDialogOrDrawer = ({
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const navigate = useNavigate();
+
+  // make sure the dialog only gets rendered on the client side
+  const [isMounted, setIsMounted] = useState(false);
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  if (!isMounted) return null;
 
   const handleDelete = async () => {
     // TODO: error handling?

@@ -21,7 +21,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (typeof name !== "string" || name.length === 0) {
     return json(
       { errors: { name: "name is required", note: null } },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -29,7 +29,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   if (typeof note !== "string") {
     return json(
       { errors: { name: null, note: "note is required" } },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
