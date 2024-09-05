@@ -9,6 +9,7 @@ import { Plus, SearchIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Header } from "~/components/header";
+import { MatchedItemsAtPlace } from "~/components/MatchedItemsAtPlace";
 import { Button, buttonVariants } from "~/components/ui/button";
 import {
   Card,
@@ -148,6 +149,7 @@ export default function PlacesPage() {
 
   useEffect(
     function filterSortedResults() {
+      // TODO: is it worth moving all of these to the loader? any reason not to?
       if (!searchTerm) {
         setDisplayedPlaces(sortedPlaces);
         setMatchedItems({});
@@ -208,6 +210,7 @@ export default function PlacesPage() {
                 placeholder="Filter..."
                 className="pl-10"
                 onChange={handleSearchChange}
+                defaultValue={searchTerm}
               />
             </div>
             <Select
@@ -255,14 +258,16 @@ export default function PlacesPage() {
                       Last visited:{" "}
                       {new Date(place.updatedAt).toLocaleDateString()}{" "}
                     </span>
-                    <span className="text-xs">
-                      {`${place._count.items} item${
-                        place._count.items === 1 ? "" : "s"
-                      } `}
+                    <div className="flex flex-col justify-end">
+                      <span className="text-xs ml-auto">
+                        {`${place._count.items} item${
+                          place._count.items === 1 ? "" : "s"
+                        } `}
+                      </span>
                       {matchedItemsForPlace?.length ? (
-                        <div>{matchedItemsForPlace}</div>
+                        <MatchedItemsAtPlace places={matchedItemsForPlace} />
                       ) : null}
-                    </span>
+                    </div>
                   </CardContent>
                 </Card>
               </li>
