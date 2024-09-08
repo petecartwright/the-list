@@ -74,3 +74,21 @@ export function useUser(): User {
 export function validateEmail(email: unknown): email is string {
   return typeof email === "string" && email.length > 3 && email.includes("@");
 }
+
+export function generateInviteCode(): string {
+  // no 0s or O's or 1's or i's or l's
+  // bc i think it's annoying to tell them apart
+  const charset = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ23456789";
+
+  const inviteCodeLength = 8;
+
+  // use a set so we don't have duplicates in the same string
+  const inviteCode = new Set<string>();
+
+  while (inviteCode.size < inviteCodeLength) {
+    const randomIndex = Math.floor(Math.random() * charset.length);
+    inviteCode.add(charset[randomIndex]);
+  }
+
+  return [...inviteCode].join("");
+}

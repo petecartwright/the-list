@@ -60,3 +60,29 @@ export async function verifyLogin(
 
   return userWithoutPassword;
 }
+
+export async function emailIsInAuthorizedList({
+  email,
+}: { email: string }): Promise<boolean> {
+  const emailAuthorized = await prisma.signupAuthorizedEmails.findUnique({
+    where: { email },
+  });
+
+  return !!emailAuthorized;
+}
+
+export async function isInviteCodeValid({
+  inviteCode,
+}: { inviteCode: string }): Promise<boolean> {
+  const validCode = await prisma.inviteCodes.findUnique({
+    where: { code: inviteCode },
+  });
+
+  return !!validCode;
+}
+
+export async function deleteInviteCode({ inviteCode }: { inviteCode: string }) {
+  return await prisma.inviteCodes.delete({
+    where: { code: inviteCode },
+  });
+}
