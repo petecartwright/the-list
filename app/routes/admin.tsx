@@ -14,6 +14,7 @@ import {
 } from "~/models/user.server";
 import { requireUser, requireUserId } from "~/session.server";
 import { useUser } from "~/utils";
+import { Check, X } from "lucide-react";
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await requireUser(request);
@@ -35,7 +36,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
 
   const intent = formData.get("intent");
-  console.log("formData", formData);
+
   if (intent === "generateInviteCode") {
     const inviteCode = await createInviteCode();
     return json({ inviteCode });
@@ -71,7 +72,20 @@ export default function AdminPage() {
           Current codes:
           <ul>
             {data.inviteCodes.map((code) => (
-              <li key={code.code}>{code.code}</li>
+              <li key={code.code}>
+                {code.code}{" "}
+                <Form method="post">
+                  <input hidden readOnly name="code" value={code.code} />
+                  <span>
+                    Valid:{" "}
+                    {code.isValid ? (
+                      <Check className="text-green-400" />
+                    ) : (
+                      <X className="text-red-600" />
+                    )}
+                  </span>
+                </Form>
+              </li>
             ))}
           </ul>
         </>

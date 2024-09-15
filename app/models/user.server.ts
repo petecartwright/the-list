@@ -89,18 +89,34 @@ export async function emailIsInAuthorizedList({
 export async function isInviteCodeValid({
   inviteCode,
 }: { inviteCode: string }): Promise<boolean> {
-  const validCode = await prisma.inviteCodes.findUnique({
+  const existingCode = await prisma.inviteCodes.findUnique({
     where: { code: inviteCode },
   });
+  if (!existingCode) return false;
 
-  return !!validCode;
+  const now = new Date();
+  const codeExpirationDate = new Date(existingCode.validUntil);
+  const codeIsValid = codeExpirationDate > now;
+
+  return codeIsValid;
 }
 
 export const getInviteCodes = async (skip?: number, take?: number) => {
-  return prisma.inviteCodes.findMany({
+  const rawCodes = await prisma.inviteCodes.findMany({
     skip,
     take,
   });
+
+  const codesWithValidity = rawCodes.map((code) => {
+    const now = new Date();
+    const codeExpirationDate = new Date(code.validUntil);
+    return {
+      ...code,
+      isValid: codeExpirationDate > now,
+    };
+  });
+
+  return codesWithValidity;
 };
 
 export async function createInviteCode() {
