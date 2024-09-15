@@ -7,6 +7,16 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model SignupAuthorizedEmails {
+  email String @id @unique
+}
+
+model InviteCodes {
+  code String @id @unique
+  validAsOf DateTime
+  validUntil DateTime
+}
+
 model User {
   id    String @id @default(cuid())
   email String @unique

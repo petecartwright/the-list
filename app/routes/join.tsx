@@ -7,7 +7,13 @@ import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 
-import { createUser, getUserByEmail } from "~/models/user.server";
+import {
+  createUser,
+  deleteInviteCode,
+  emailIsInAuthorizedList,
+  getUserByEmail,
+  isInviteCodeValid,
+} from "~/models/user.server";
 import { createUserSession, getUserId } from "~/session.server";
 import { safeRedirect, validateEmail } from "~/utils";
 
@@ -21,27 +27,78 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const email = formData.get("email");
   const password = formData.get("password");
+  const inviteCode = formData.get("invite-code");
   const redirectTo = safeRedirect(formData.get("redirectTo"), "/");
 
   if (!validateEmail(email)) {
     return json(
-      { errors: { email: "Email is invalid", password: null } },
+      {
+        errors: {
+          email: "Email is invalid",
+          inviteCode: null,
+          password: null,
+        },
+      },
       { status: 400 },
     );
   }
 
   if (typeof password !== "string" || password.length === 0) {
     return json(
-      { errors: { email: null, password: "Password is required" } },
+      {
+        errors: {
+          email: null,
+          inviteCode: null,
+          password: "Password is required",
+        },
+      },
       { status: 400 },
     );
   }
 
   if (password.length < 8) {
     return json(
-      { errors: { email: null, password: "Password is too short" } },
+      {
+        errors: {
+          email: null,
+          inviteCode: null,
+          password: "Password is too short",
+        },
+      },
       { status: 400 },
     );
+  }
+
+  const emailIsAuthorized = await emailIsInAuthorizedList({ email });
+
+  if (!emailIsAuthorized) {
+    return json(
+      {
+        errors: {
+          email: "Sorry, we're only allowing limited signups for now!",
+          inviteCode: null,
+          password: null,
+        },
+      },
+      { status: 400 },
+    );
+  }
+
+  let inviteIsValid = false;
+  if (typeof inviteCode === "string" && inviteCode.length > 0) {
+    inviteIsValid = await isInviteCodeValid({ inviteCode });
+    if (!inviteIsValid) {
+      return json(
+        {
+          errors: {
+            email: null,
+            inviteCode: "Invalid invite code",
+            password: null,
+          },
+        },
+        { status: 400 },
+      );
+    }
   }
 
   const existingUser = await getUserByEmail(email);
@@ -50,6 +107,7 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       {
         errors: {
           email: "A user already exists with this email",
+          inviteCode: null,
           password: null,
         },
       },
@@ -58,6 +116,16 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   }
 
   const user = await createUser(email, password);
+
+  // TODO: is there a clearer way to do this? invariant?
+  if (
+    typeof inviteCode === "string" &&
+    inviteCode.length > 0 &&
+    inviteIsValid
+  ) {
+    // now that we've created the user, kill the invite code
+    await deleteInviteCode({ inviteCode });
+  }
 
   return createUserSession({
     redirectTo,
@@ -75,12 +143,15 @@ export default function Join() {
   const actionData = useActionData<typeof action>();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const inviteCodeRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (actionData?.errors?.email) {
       emailRef.current?.focus();
     } else if (actionData?.errors?.password) {
       passwordRef.current?.focus();
+    } else if (actionData?.errors?.inviteCode) {
+      inviteCodeRef.current?.focus();
     }
   }, [actionData]);
 
@@ -136,6 +207,31 @@ export default function Join() {
               {actionData?.errors?.password ? (
                 <div className="pt-1 text-red-700" id="password-error">
                   {actionData.errors.password}
+                </div>
+              ) : null}
+            </div>
+          </div>
+
+          <div>
+            <label
+              htmlFor="invite-code"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Invite Code
+            </label>
+            <div className="mt-1">
+              <input
+                id="invite-code"
+                ref={inviteCodeRef}
+                name="invite-code"
+                type="invite-code"
+                aria-invalid={actionData?.errors?.inviteCode ? true : undefined}
+                aria-describedby="invite-code-error"
+                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
+              />
+              {actionData?.errors?.inviteCode ? (
+                <div className="pt-1 text-red-700" id="invite-code-error">
+                  {actionData.errors.inviteCode}
                 </div>
               ) : null}
             </div>
