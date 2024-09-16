@@ -25,26 +25,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const redirectTo = safeRedirect(formData.get("redirectTo"), "/");
   const remember = formData.get("remember");
 
-  const PEOPLE_WHO_ARE_ALLOWED_TO_REGISTER = [
-    "pete@petecartwright.com",
-    "kuhn.laura@gmail.com",
-    "rachel@remixrun.com",
-  ];
-
-  if (
-    email &&
-    PEOPLE_WHO_ARE_ALLOWED_TO_REGISTER.includes(
-      email.toString().toLocaleLowerCase(),
-    )
-  ) {
-    return json(
-      {
-        errors: { email: "Only Pete and Laura can sign up rn", password: null },
-      },
-      { status: 400 },
-    );
-  }
-
   if (!validateEmail(email)) {
     return json(
       { errors: { email: "Email is invalid", password: null } },
